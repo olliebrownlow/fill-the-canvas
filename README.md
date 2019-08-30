@@ -1,18 +1,18 @@
 # Fill the canvas
 
-### Basic command line canvas editor simulator
+## Basic command line canvas editor simulator
 
 - M x N matrix of pixels representing the canvas
 - Each element represents a colour
 - Command line instructions as per below
 
-## Getting started
+### Getting started
 
 Clone the repo, navigate to the root directory and run `bundle install` to get started.
 
 To use the program run `ruby bin/run.rb`.
 
-#### Commands
+### Commands
 
 `I M N` :- Initiates a new matrix M x N in size with all elements white (O).
 
@@ -35,6 +35,7 @@ OOOOO
 OOOOO
 OOOOO
 > C
+> S
 OOOOO
 OOOOO
 OOOOO
@@ -42,3 +43,9 @@ OOOOO
 OOOOO
 OOOOO
 ```
+### User stories
+
+- As a user, I want to be able to create a new canvas of any size I choose.
+- As a user, I want to be able to see my canvas.
+- As a user, I want to be able to change the colour of individual pixels.
+- As a user, I want to be able to reset my canvas.
