@@ -1,5 +1,9 @@
 # Fill the canvas
 
+## Getting started
+
+Clone the repo and run `bundle install` to get started
+
 ### Basic command line canvas editor simulation
 
 - M x N matrix of pixels representing the canvas
