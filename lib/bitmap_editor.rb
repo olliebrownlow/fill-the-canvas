@@ -16,9 +16,9 @@ class Canvas
 
       if input == "help"
         help
-      elsif input[0] == "I" && (1..250).include?(input[2].to_i) && (1..250).include?(input[4].to_i)
-        m = input[2].to_i
-        n = input[4].to_i
+      elsif input.split(" ")[0] == "I" && (1..250).include?(input.split(" ")[1].to_i) && (1..250).include?(input.split(" ")[2].to_i)
+        n = input.split(" ")[1].to_i
+        m = input.split(" ")[2].to_i
         create_canvas(m, n)
       else
         puts "Invalid command, type 'help' to see a list of available commands."
@@ -35,8 +35,8 @@ class Canvas
   end
 
   def create_canvas(m, n)
-    @canvas = Array.new(m) {
-      Array.new(n, "O")
+    @canvas = Array.new(n) {
+      Array.new(m, "O")
     }
   end
 end

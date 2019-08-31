@@ -52,4 +52,10 @@ OOOOO
 
 ### Code design
 
-- I went with creating 2d arrays to represent the canvas as opposed to a Matrix as the latter are immutable.
+- Initial confusion - the M x N matrix in the example in the brief is not written as per conventional matrix reference - M refers to columns and N to rows. `I 5 6` asks to create a canvas with 5 columns and 6 rows, NOT 5 rows and 6 columns.
+- I went with creating 2d arrays to represent the canvas as opposed to a matrix, as the latter are immutable in Ruby.
+
+### Edge cases
+
+`I M N` command
+- Although not ruled out by the `create_canvas` method, in practice it is not possible to create a canvas more than 250 x 250 or less than 1 x 1 as entering a number more than 250 or less than 1 for either argument leads to an invalid command due to the conditions on the command `I`. These conditions also rule out other data types.
