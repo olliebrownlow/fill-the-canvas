@@ -52,6 +52,9 @@ OOOOO
 - As a user, I want to be able to see my canvas.
 - As a user, I want to be able to change the colour of individual pixels.
 - As a user, I want to be able to reset my canvas.
+- As a user, I want to be able to draw a vertical line.
+- As a user, I want to be able to draw a horizontal line.
+- As a user, I want to be able to see in program help.
 
 ### Code design
 
