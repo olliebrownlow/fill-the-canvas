@@ -9,11 +9,11 @@ class Canvas
     greet
     canvas_size = []
     while true
-      puts "\nType 'help' to see a list of available commands. Type 'quit' to exit."
+      puts "\nType 'help' to see a list of available commands. Type 'X' to exit."
       print "Enter command: "
       input = gets.chomp
 
-      break if input == "quit"
+      break if input == "X"
 
       if input == "help"
         help

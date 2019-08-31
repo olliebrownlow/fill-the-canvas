@@ -14,6 +14,8 @@ To use the program run `ruby bin/run.rb`.
 
 ### Commands
 
+`X` :- Exits the program.
+
 `I M N` :- Initiates a new matrix M x N in size with all elements white (O).
 
 `L X Y C` :- Colours pixel (x,y) with colour C.
@@ -54,17 +56,17 @@ OOOOO
 
 - Initial confusion - the M x N matrix in the example in the brief is not written as per conventional matrix reference - M refers to columns and N to rows. `I 5 6` asks to create a canvas with 5 columns and 6 rows, NOT 5 rows and 6 columns.
 - I went with creating 2d arrays to represent the canvas as opposed to a matrix, as the latter are immutable in Ruby.
-- In the Pushing m and n to an array to use to limit acceptable pixel choices in the `L` command
+- I push the values for M and N to an array called `canvas_size`. These values are used to limit the acceptable pixel choice when using the `L X Y C` command.
 
 ### Edge cases
 
 `I M N` command
-- Although not ruled out by the `create_canvas` method, in practice it is not possible to create a canvas more than 250 x 250 or less than 1 x 1 as entering a number more than 250 or less than 1 for either argument leads to an invalid command response due to the conditions on the command `I`. These conditions also rule out other data types.
-- Any extra arguments placed after the `N` argument will lead to an invalid command response.
+- Although not ruled out by the `create_canvas` method, in practice it is not possible to create a canvas more than 250 x 250 or less than 1 x 1 as entering a number more than 250 or less than 1 for either argument leads to an "invalid command" response due to the conditions on the command `I`. These conditions also rule out other data types.
+- Any extra arguments placed after the `N` argument will lead to an "invalid command" response.
 
 `S` command
  - If no canvas has been created, an error message is displayed asking the user to create one first.
 
  `L X Y C` command
  - Although not ruled out by the `colour_pixel` method, in practice it is not possible to change the colour of a chosen pixel outside of the boundary of the current canvas. This is due to the conditions when inputting the `L` command and its arguments.
-- Any extra arguments placed after the `C` argument will lead to an invalid command response.
+- Any extra arguments placed after the `C` argument will lead to an "invalid command" response.
