@@ -59,3 +59,6 @@ OOOOO
 
 `I M N` command
 - Although not ruled out by the `create_canvas` method, in practice it is not possible to create a canvas more than 250 x 250 or less than 1 x 1 as entering a number more than 250 or less than 1 for either argument leads to an invalid command due to the conditions on the command `I`. These conditions also rule out other data types.
+
+`S` command
+ - If no canvas has been created, an error message is displayed asking the user to create one first
