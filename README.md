@@ -49,3 +49,7 @@ OOOOO
 - As a user, I want to be able to see my canvas.
 - As a user, I want to be able to change the colour of individual pixels.
 - As a user, I want to be able to reset my canvas.
+
+### Code design
+
+- I went with creating 2d arrays to represent the canvas as opposed to a Matrix as the latter are immutable.

@@ -1,3 +1,4 @@
 require_relative '../config/environment'
 
-Canvas.run
+canvas = Canvas.new
+canvas.run
