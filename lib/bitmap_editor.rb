@@ -33,6 +33,12 @@ class Canvas
         colour_pixel(x, y, colour)
       elsif input == "C"
         clear_canvas
+      elsif input.split(" ")[0] == "V" && (1..canvas_size[0]).include?(input.split(" ")[1].to_i) && (1..canvas_size[1]).include?(input.split(" ")[2].to_i) && (1..canvas_size[1]).include?(input.split(" ")[3].to_i) && ("A".."Z").include?(input.split(" ")[4]) && input.split(" ")[5] == nil
+        column = input.split(" ")[1].to_i
+        row1 = input.split(" ")[2].to_i
+        row2 = input.split(" ")[3].to_i
+        colour = input.split(" ")[4]
+        draw_vertical_line(column, row1, row2, colour)
       else
         puts "\nInvalid command, type 'help' to see a list of available commands."
       end
@@ -72,6 +78,12 @@ class Canvas
         pixel = "O"
       }
     }
+  end
+
+  def draw_vertical_line(column, row1, row2, colour)
+    canvas[row1-1][column-1] = "Z"
+    canvas[row2-1][column-1] = "Z"
+    canvas
   end
 
   private

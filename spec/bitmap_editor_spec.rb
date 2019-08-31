@@ -47,4 +47,11 @@ describe Canvas do
       expect(canvas.clear_canvas).to eq ([["O", "O"], ["O", "O"], ["O", "O"], ["O", "O"]])
     end
   end
+
+  describe '#draw_vertical_line' do
+    it 'draws a vertical line' do
+      canvas.create_canvas(2, 4)
+      expect(canvas.draw_vertical_line(2, 2, 4, "Z")).to eq ([["O", "O"], ["O", "Z"], ["O", "Z"], ["O", "Z"]])
+    end
+  end
 end
