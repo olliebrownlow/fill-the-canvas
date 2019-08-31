@@ -33,4 +33,18 @@ describe Canvas do
       expect(canvas.colour_pixel(2, 4, "A")).to eq ([["O", "O"], ["O", "O"], ["O", "O"], ["O", "A"]])
     end
   end
+
+  describe '#clear_canvas' do
+    it 'resets the canvas to white' do
+      canvas.create_canvas(1, 1)
+      canvas.colour_pixel(1, 1, "Z")
+      expect(canvas.clear_canvas).to eq ([["O"]])
+    end
+
+    it 'resets the canvas to white' do
+      canvas.create_canvas(2, 4)
+      canvas.colour_pixel(2, 2, "Z")
+      expect(canvas.clear_canvas).to eq ([["O", "O"], ["O", "O"], ["O", "O"], ["O", "O"]])
+    end
+  end
 end

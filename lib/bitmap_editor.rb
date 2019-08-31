@@ -31,6 +31,8 @@ class Canvas
         y = input.split(" ")[2].to_i
         colour = input.split(" ")[3]
         colour_pixel(x, y, colour)
+      elsif input == "C"
+        clear_canvas
       else
         puts "\nInvalid command, type 'help' to see a list of available commands."
       end
@@ -62,6 +64,14 @@ class Canvas
   def colour_pixel(x, y, colour)
     canvas[y-1][x-1] = colour
     canvas
+  end
+
+  def clear_canvas
+    canvas.each { |row|
+      row.map! { |pixel|
+        pixel = "O"
+      }
+    }
   end
 
   private

@@ -47,7 +47,8 @@ OOOOO
 ```
 ### User stories
 
-- As a user, I want to be able to create a new canvas of any size I choose.
+- As a user I want to be able to quit the program
+- As a user, I want to be able to create a new canvas of any size I choose (up to 250 x 250).
 - As a user, I want to be able to see my canvas.
 - As a user, I want to be able to change the colour of individual pixels.
 - As a user, I want to be able to reset my canvas.
