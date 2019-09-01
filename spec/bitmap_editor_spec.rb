@@ -61,4 +61,61 @@ describe Canvas do
       expect(canvas.draw_horizontal_line(2, 4, 2, "Z")).to eq [["O", "O", "O", "O", "O"], ["O", "Z", "Z", "Z", "O"], ["O", "O", "O", "O", "O"]]
     end
   end
+
+  describe '#fill' do
+    it 'paints all neighbouring pixels of the same colour with a new colour given a top left start point' do
+      canvas.create_canvas(3, 3)
+      expect(canvas.fill(1, 1, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "Z"]]
+    end
+
+    it 'paints all neighbouring pixels of the same colour with a new colour given a bottom right start point' do
+      canvas.create_canvas(3, 3)
+      expect(canvas.fill(3, 3, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "Z"]]
+    end
+
+    it 'paints all neighbouring pixels of the same colour with a new colour given a top right start point' do
+      canvas.create_canvas(3, 3)
+      expect(canvas.fill(3, 1, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "Z"]]
+    end
+
+    it 'paints all neighbouring pixels of the same colour with a new colour given a bottom left start point' do
+      canvas.create_canvas(3, 3)
+      expect(canvas.fill(1, 3, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "Z"]]
+    end
+
+    it 'paints all neighbouring pixels of the same colour with a new colour' do
+      canvas.create_canvas(3, 3)
+      canvas.colour_pixel(3, 3, "T")
+      expect(canvas.fill(2, 2, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "T"]]
+    end
+
+    it 'paints no neighbouring pixels if none of them are of the same colour' do
+      canvas.create_canvas(3, 3)
+      canvas.colour_pixel(3, 3, "T")
+      expect(canvas.fill(3, 3, "Z", "T")).to eq [["O", "O", "O"], ["O", "O", "O"], ["O", "O", "Z"]]
+    end
+
+    it 'paints a region all of one colour with a new colour' do
+      canvas.create_canvas(4, 4)
+      canvas.draw_horizontal_line(1, 4, 1, "T")
+      canvas.draw_horizontal_line(1, 4, 4, "T")
+      canvas.draw_vertical_line(1, 1, 4, "T")
+      canvas.draw_vertical_line(4, 1, 4, "T")
+      expect(canvas.fill(2, 2, "Z", "O")).to eq [["T", "T", "T", "T"], ["T", "Z", "Z", "T"], ["T", "Z", "Z", "T"], ["T", "T", "T", "T"]]
+    end
+
+    it 'paints all neighbouring pixels of the same colour with a new colour' do
+      canvas.create_canvas(4, 4)
+      canvas.draw_horizontal_line(1, 4, 1, "T")
+      canvas.draw_horizontal_line(1, 4, 4, "T")
+      canvas.draw_vertical_line(1, 1, 4, "T")
+      canvas.draw_vertical_line(4, 1, 4, "T")
+      expect(canvas.fill(1, 1, "Z", "T")).to eq [["Z", "Z", "Z", "Z"], ["Z", "O", "O", "Z"], ["Z", "O", "O", "Z"], ["Z", "Z", "Z", "Z"]]
+    end
+
+    it 'throws error if original colour is the same as new colour' do
+      canvas.create_canvas(4, 4)
+      expect { canvas.fill(1, 1, "O", "O") }.to raise_error("Oops! Region already that colour: please choose a different fill colour")
+    end
+  end
 end

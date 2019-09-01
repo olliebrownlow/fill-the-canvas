@@ -6,6 +6,7 @@ class Canvas
 
   def initialize
     @canvas
+    @instructions = []
   end
 
   def run
@@ -25,14 +26,12 @@ class Canvas
             (1..250).include?(input.split(" ")[2].to_i) &&
             input.split(" ")[3].nil?
 
-        columns = input.split(" ")[1].to_i
-        rows = input.split(" ")[2].to_i
-
         canvas_dimensions.clear
-        canvas_dimensions.push(columns)
-        canvas_dimensions.push(rows)
+        canvas_dimensions << input.split(" ")[1].to_i
+        canvas_dimensions << input.split(" ")[2].to_i
 
-        create_canvas(columns, rows)
+        create_canvas(canvas_dimensions[0], canvas_dimensions[1])
+
       elsif input == "S"
         show_canvas
       elsif input.split(" ")[0] == "L" &&
@@ -41,11 +40,11 @@ class Canvas
             ("A".."Z").include?(input.split(" ")[3]) &&
             input.split(" ")[4].nil?
 
-        x = input.split(" ")[1].to_i
-        y = input.split(" ")[2].to_i
+        column = input.split(" ")[1].to_i
+        row = input.split(" ")[2].to_i
         colour = input.split(" ")[3]
 
-        colour_pixel(x, y, colour)
+        colour_pixel(column, row, colour)
       elsif input == "C"
         clear_canvas
       elsif input.split(" ")[0] == "V" &&
@@ -73,8 +72,16 @@ class Canvas
         row = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
         draw_horizontal_line(column1, column2, row, colour)
-      else
 
+      elsif input.split(" ")[0] == "F"
+
+        column = input.split(" ")[1].to_i
+        row = input.split(" ")[2].to_i
+        new_colour = input.split(" ")[3]
+        original_colour = canvas[row - 1][column - 1]
+
+        fill(column, row, new_colour, original_colour)
+      else
         puts INVALID_COMMAND_MSG
       end
     end
@@ -122,6 +129,18 @@ class Canvas
     canvas.nil? ? puts(NO_CANVAS_MSG) : for i in (column1..column2)
                                           colour_pixel(i, row, colour)
                                         end
+    canvas
+  end
+
+  def fill(column, row, new_colour, original_colour)
+    raise "Oops! Region already that colour: please choose a different fill colour" if new_colour == original_colour
+    if canvas[row - 1][column - 1] == original_colour
+      colour_pixel(column, row, new_colour)
+      fill(column - 1, row, new_colour, original_colour) if !canvas[column - 1].nil?
+      fill(column, row - 1, new_colour, original_colour) if !canvas[row - 1].nil?
+      fill(column + 1, row, new_colour, original_colour) if !canvas[column + 1].nil?
+      fill(column, row + 1, new_colour, original_colour) if !canvas[row + 1].nil?
+    end
     canvas
   end
 
