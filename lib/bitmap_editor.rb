@@ -1,7 +1,8 @@
 class Canvas
+  INVALID_COMMAND_MSG = "\nInvalid command, type 'help' to see a list of available commands."
   NO_CANVAS_MSG = "\nNo canvas created yet: please create one using the 'I M N' command."
 
- attr_reader :canvas
+  attr_reader :canvas
 
   def initialize
     @canvas
@@ -22,7 +23,7 @@ class Canvas
       elsif input.split(" ")[0] == "I" &&
             (1..250).include?(input.split(" ")[1].to_i) &&
             (1..250).include?(input.split(" ")[2].to_i) &&
-            input.split(" ")[3] == nil
+            input.split(" ")[3].nil?
 
         m = input.split(" ")[1].to_i
         n = input.split(" ")[2].to_i
@@ -38,7 +39,7 @@ class Canvas
             (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
             (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
             ("A".."Z").include?(input.split(" ")[3]) &&
-            input.split(" ")[4] == nil
+            input.split(" ")[4].nil?
 
         x = input.split(" ")[1].to_i
         y = input.split(" ")[2].to_i
@@ -52,7 +53,7 @@ class Canvas
             (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
             (input.split(" ")[2].to_i..canvas_size[1]).include?(input.split(" ")[3].to_i) &&
             ("A".."Z").include?(input.split(" ")[4]) &&
-            input.split(" ")[5] == nil
+            input.split(" ")[5].nil?
 
         column = input.split(" ")[1].to_i
         row1 = input.split(" ")[2].to_i
@@ -60,7 +61,8 @@ class Canvas
         colour = input.split(" ")[4]
         draw_vertical_line(column, row1, row2, colour)
       else
-        puts "\nInvalid command, type 'help' to see a list of available commands."
+
+        puts INVALID_COMMAND_MSG
       end
     end
   end
@@ -80,28 +82,28 @@ class Canvas
   end
 
   def show_canvas
-    canvas == nil ? puts(NO_CANVAS_MSG) : format_and_print_canvas(canvas)
+    canvas.nil? ? puts(NO_CANVAS_MSG) : format_and_print_canvas(canvas)
   end
 
   def colour_pixel(x, y, colour)
-    canvas == nil ? puts(NO_CANVAS_MSG) : canvas[y-1][x-1] = colour
+    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[y - 1][x - 1] = colour
     canvas
   end
 
   def clear_canvas
-    canvas == nil ? puts(NO_CANVAS_MSG) : canvas.each { |row|
-                                          row.map! { |pixel|
-                                            pixel = "O"
+    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.each { |row|
+                                          row.map! {
+                                            "O"
                                           }
                                         }
   end
 
   def draw_vertical_line(column, row1, row2, colour)
-    canvas == nil ? puts(NO_CANVAS_MSG) : canvas.map.with_index { |row, i|
-                                          if i >= (row1 - 1) && i <= (row2 - 1)
-                                            row[column-1] = colour
-                                          end
-                                        }
+    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.map.with_index { |row, i|
+      if i >= (row1 - 1) && i <= (row2 - 1)
+        row[column - 1] = colour
+      end
+    }
     canvas
   end
 
