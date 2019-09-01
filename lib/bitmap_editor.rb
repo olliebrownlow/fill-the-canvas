@@ -1,4 +1,6 @@
 class Canvas
+  NO_CANVAS_MSG = "\nNo canvas created yet: please create one using the 'I M N' command."
+
  attr_reader :canvas
 
   def initialize
@@ -78,32 +80,28 @@ class Canvas
   end
 
   def show_canvas
-    if canvas == nil
-      puts "\nNo canvas created yet: please create one using the 'I M N' command."
-    else
-      format_and_print_canvas(canvas)
-    end
+    canvas == nil ? puts(NO_CANVAS_MSG) : format_and_print_canvas(canvas)
   end
 
   def colour_pixel(x, y, colour)
-    canvas[y-1][x-1] = colour
+    canvas == nil ? puts(NO_CANVAS_MSG) : canvas[y-1][x-1] = colour
     canvas
   end
 
   def clear_canvas
-    canvas.each { |row|
-      row.map! { |pixel|
-        pixel = "O"
-      }
-    }
+    canvas == nil ? puts(NO_CANVAS_MSG) : canvas.each { |row|
+                                          row.map! { |pixel|
+                                            pixel = "O"
+                                          }
+                                        }
   end
 
   def draw_vertical_line(column, row1, row2, colour)
-    canvas.map.with_index { |row, i|
-      if i >= (row1 - 1) && i <= (row2 - 1)
-        row[column-1] = colour
-      end
-    }
+    canvas == nil ? puts(NO_CANVAS_MSG) : canvas.map.with_index { |row, i|
+                                          if i >= (row1 - 1) && i <= (row2 - 1)
+                                            row[column-1] = colour
+                                          end
+                                        }
     canvas
   end
 

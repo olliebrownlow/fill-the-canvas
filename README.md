@@ -71,11 +71,20 @@ OOOOO
 - Any extra arguments placed after the `N` argument will lead to an "invalid command" response.
 
 `S` command
- - If no canvas has been created, an error message is displayed asking the user to create one first.
+- If no canvas has been created, an error message is displayed asking the user to create one first.
 
- `L X Y C` command
- - Although not ruled out by the `colour_pixel` method, in practice it is not possible to change the colour of a chosen pixel outside of the boundary of the current canvas. This is due to the conditions when inputting the `L` command and its arguments.
+`L X Y C` command
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+- Although not ruled out by the `colour_pixel` method, in practice it is not possible to change the colour of a chosen pixel outside of the boundary of the current canvas. This is due to the conditions when inputting the `L` command and its arguments.
 - Any extra arguments placed after the `C` argument will lead to an "invalid command" response.
+
+`C` command
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+
+`V X Y1 Y2 C` command
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+- Although not ruled out by the `draw_vertical_line` method, in practice it is not possible to draw a line outside of the boundary of the current canvas. This is due to the conditions set when inputting the `V` command and its arguments.
+- It is also not possible to input the rows such that the value of `Y1` is higher than the value of `Y2`, e.g., `V 2 4 1 Z`, again due to the conditions in the relevant `elsif` statement.
 
 ### Unresolved edge case
 
