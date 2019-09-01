@@ -10,34 +10,34 @@ class Canvas
 
   def run
     greet
-    canvas_size = []
+    canvas_dimensions = []
     while true
-      puts "\nType 'help' to see a list of available commands. Type 'X' to exit."
+      puts "\nType '?' to see a list of available commands. Type 'X' to exit."
       print "Enter command: "
       input = gets.chomp
 
       break if input == "X"
 
-      if input == "help"
+      if input == "?"
         help
       elsif input.split(" ")[0] == "I" &&
             (1..250).include?(input.split(" ")[1].to_i) &&
             (1..250).include?(input.split(" ")[2].to_i) &&
             input.split(" ")[3].nil?
 
-        m = input.split(" ")[1].to_i
-        n = input.split(" ")[2].to_i
+        columns = input.split(" ")[1].to_i
+        rows = input.split(" ")[2].to_i
 
-        canvas_size.clear
-        canvas_size.push(m)
-        canvas_size.push(n)
+        canvas_dimensions.clear
+        canvas_dimensions.push(columns)
+        canvas_dimensions.push(rows)
 
-        create_canvas(m, n)
+        create_canvas(columns, rows)
       elsif input == "S"
         show_canvas
       elsif input.split(" ")[0] == "L" &&
-            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
-            (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
+            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
             ("A".."Z").include?(input.split(" ")[3]) &&
             input.split(" ")[4].nil?
 
@@ -49,9 +49,9 @@ class Canvas
       elsif input == "C"
         clear_canvas
       elsif input.split(" ")[0] == "V" &&
-            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
-            (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
-            (input.split(" ")[2].to_i..canvas_size[1]).include?(input.split(" ")[3].to_i) &&
+            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
+            (input.split(" ")[2].to_i..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
             ("A".."Z").include?(input.split(" ")[4]) &&
             input.split(" ")[5].nil?
 
@@ -62,9 +62,9 @@ class Canvas
         draw_vertical_line(column, row1, row2, colour)
 
       elsif input.split(" ")[0] == "H" &&
-            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
-            (input.split(" ")[1].to_i..canvas_size[0]).include?(input.split(" ")[2].to_i) &&
-            (1..canvas_size[1]).include?(input.split(" ")[3].to_i) &&
+            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+            (input.split(" ")[1].to_i..canvas_dimensions[0]).include?(input.split(" ")[2].to_i) &&
+            (1..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
             ("A".."Z").include?(input.split(" ")[4]) &&
             input.split(" ")[5].nil?
 
@@ -88,9 +88,9 @@ class Canvas
     puts "\nHelp at hand"
   end
 
-  def create_canvas(m, n)
-    @canvas = Array.new(n) {
-      Array.new(m, "O")
+  def create_canvas(columns, rows)
+    @canvas = Array.new(rows) {
+      Array.new(columns, "O")
     }
   end
 
@@ -98,36 +98,30 @@ class Canvas
     canvas.nil? ? puts(NO_CANVAS_MSG) : format_and_print_canvas(canvas)
   end
 
-  def colour_pixel(x, y, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[y - 1][x - 1] = colour
+  def colour_pixel(column, row, colour)
+    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[row - 1][column - 1] = colour
     canvas
   end
 
   def clear_canvas
     canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.each { |row|
-                                          row.map! {
-                                            "O"
-                                          }
-                                        }
+      row.map! {
+        "O"
+      }
+    }
   end
 
   def draw_vertical_line(column, row1, row2, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.map.with_index { |row, i|
-      if i >= (row1 - 1) && i <= (row2 - 1)
-        row[column - 1] = colour
-      end
-    }
+    canvas.nil? ? puts(NO_CANVAS_MSG) : for i in (row1..row2)
+                                          colour_pixel(column, i, colour)
+                                        end
     canvas
   end
 
   def draw_horizontal_line(column1, column2, row, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[row - 1].map!.with_index { |pixel, i|
-      if i >= (column1 - 1) && i <= (column2 - 1)
-        pixel = 'Z'
-      else
-        pixel
-      end
-    }
+    canvas.nil? ? puts(NO_CANVAS_MSG) : for i in (column1..column2)
+                                          colour_pixel(i, row, colour)
+                                        end
     canvas
   end
 
