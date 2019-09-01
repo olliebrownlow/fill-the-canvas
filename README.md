@@ -26,6 +26,8 @@ To use the program run `ruby bin/run.rb`.
 
 `V X Y1 Y2 C` :- Colours a vertical line of pixels in column X between rows Y1 and Y2 inclusive, in colour C
 
+`H X1 X2 Y C` :- Colours a horizontal line of pixels in row Y between columns X1 and X2 inclusive, in colour C
+
 Example:
 
 ```
@@ -56,7 +58,7 @@ OOOOO
 - As a user, I want to be able to reset my canvas.
 - As a user, I want to be able to draw a vertical line in a column of my choice stretching between the rows I choose.
 - As a user, I want to be able to draw a horizontal line in a row of my choice stretching between the columns I choose.
-- As a user, I want to be able to see in program help.
+- As a user, I want to be able to see in-program help.
 
 ### Code design
 
@@ -85,6 +87,11 @@ OOOOO
 - If no canvas has been created, an error message is displayed asking the user to create one first.
 - Although not ruled out by the `draw_vertical_line` method, in practice it is not possible to draw a line outside of the boundary of the current canvas. This is due to the conditions set when inputting the `V` command and its arguments.
 - It is also not possible to input the rows such that the value of `Y1` is higher than the value of `Y2`, e.g., `V 2 4 1 Z`, again due to the conditions in the relevant `elsif` statement.
+
+`H X1 X2 Y C` command
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+- Although not ruled out by the `draw_horizontal_line` method, in practice it is not possible to draw a line outside of the boundary of the current canvas. This is due to the conditions set when inputting the `H` command and its arguments.
+- It is also not possible to input the columns such that the value of `X1` is higher than the value of `X2`, e.g., `H 4 2 2 Z`, again due to the conditions in the relevant `elsif` statement.
 
 ### Unresolved edge case
 

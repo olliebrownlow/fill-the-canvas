@@ -60,6 +60,19 @@ class Canvas
         row2 = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
         draw_vertical_line(column, row1, row2, colour)
+
+      elsif input.split(" ")[0] == "H" &&
+            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
+            (input.split(" ")[1].to_i..canvas_size[0]).include?(input.split(" ")[2].to_i) &&
+            (1..canvas_size[1]).include?(input.split(" ")[3].to_i) &&
+            ("A".."Z").include?(input.split(" ")[4]) &&
+            input.split(" ")[5].nil?
+
+        column1 = input.split(" ")[1].to_i
+        column2 = input.split(" ")[2].to_i
+        row = input.split(" ")[3].to_i
+        colour = input.split(" ")[4]
+        draw_horizontal_line(column1, column2, row, colour)
       else
 
         puts INVALID_COMMAND_MSG
@@ -102,6 +115,17 @@ class Canvas
     canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.map.with_index { |row, i|
       if i >= (row1 - 1) && i <= (row2 - 1)
         row[column - 1] = colour
+      end
+    }
+    canvas
+  end
+
+  def draw_horizontal_line(column1, column2, row, colour)
+    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[row - 1].map!.with_index { |pixel, i|
+      if i >= (column1 - 1) && i <= (column2 - 1)
+        pixel = 'Z'
+      else
+        pixel
       end
     }
     canvas
