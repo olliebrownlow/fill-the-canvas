@@ -17,23 +17,41 @@ class Canvas
 
       if input == "help"
         help
-      elsif input.split(" ")[0] == "I" && (1..250).include?(input.split(" ")[1].to_i) && (1..250).include?(input.split(" ")[2].to_i) && input.split(" ")[3] == nil
+      elsif input.split(" ")[0] == "I" &&
+            (1..250).include?(input.split(" ")[1].to_i) &&
+            (1..250).include?(input.split(" ")[2].to_i) &&
+            input.split(" ")[3] == nil
+
         m = input.split(" ")[1].to_i
         n = input.split(" ")[2].to_i
+
         canvas_size.clear
         canvas_size.push(m)
         canvas_size.push(n)
+
         create_canvas(m, n)
       elsif input == "S"
         show_canvas
-      elsif input.split(" ")[0] == "L" && (1..canvas_size[0]).include?(input.split(" ")[1].to_i) && (1..canvas_size[1]).include?(input.split(" ")[2].to_i) && ("A".."Z").include?(input.split(" ")[3]) && input.split(" ")[4] == nil
+      elsif input.split(" ")[0] == "L" &&
+            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
+            (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
+            ("A".."Z").include?(input.split(" ")[3]) &&
+            input.split(" ")[4] == nil
+
         x = input.split(" ")[1].to_i
         y = input.split(" ")[2].to_i
         colour = input.split(" ")[3]
+
         colour_pixel(x, y, colour)
       elsif input == "C"
         clear_canvas
-      elsif input.split(" ")[0] == "V" && (1..canvas_size[0]).include?(input.split(" ")[1].to_i) && (1..canvas_size[1]).include?(input.split(" ")[2].to_i) && (1..canvas_size[1]).include?(input.split(" ")[3].to_i) && ("A".."Z").include?(input.split(" ")[4]) && input.split(" ")[5] == nil
+      elsif input.split(" ")[0] == "V" &&
+            (1..canvas_size[0]).include?(input.split(" ")[1].to_i) &&
+            (1..canvas_size[1]).include?(input.split(" ")[2].to_i) &&
+            (input.split(" ")[2].to_i..canvas_size[1]).include?(input.split(" ")[3].to_i) &&
+            ("A".."Z").include?(input.split(" ")[4]) &&
+            input.split(" ")[5] == nil
+
         column = input.split(" ")[1].to_i
         row1 = input.split(" ")[2].to_i
         row2 = input.split(" ")[3].to_i
@@ -81,8 +99,11 @@ class Canvas
   end
 
   def draw_vertical_line(column, row1, row2, colour)
-    canvas[row1-1][column-1] = "Z"
-    canvas[row2-1][column-1] = "Z"
+    canvas.map.with_index { |row, i|
+      if i >= (row1 - 1) && i <= (row2 - 1)
+        row[column-1] = colour
+      end
+    }
     canvas
   end
 

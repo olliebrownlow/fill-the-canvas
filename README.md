@@ -24,6 +24,8 @@ To use the program run `ruby bin/run.rb`.
 
 `S` :- Shows the current canvas.
 
+`V X Y1 Y2 C` :- Colours a vertical line of pixels in column X between rows Y1 and Y2 inclusive, in colour C
+
 Example:
 
 ```
@@ -52,8 +54,8 @@ OOOOO
 - As a user, I want to be able to see my canvas.
 - As a user, I want to be able to change the colour of individual pixels.
 - As a user, I want to be able to reset my canvas.
-- As a user, I want to be able to draw a vertical line.
-- As a user, I want to be able to draw a horizontal line.
+- As a user, I want to be able to draw a vertical line in a column of my choice stretching between the rows I choose.
+- As a user, I want to be able to draw a horizontal line in a row of my choice stretching between the columns I choose.
 - As a user, I want to be able to see in program help.
 
 ### Code design
@@ -74,3 +76,7 @@ OOOOO
  `L X Y C` command
  - Although not ruled out by the `colour_pixel` method, in practice it is not possible to change the colour of a chosen pixel outside of the boundary of the current canvas. This is due to the conditions when inputting the `L` command and its arguments.
 - Any extra arguments placed after the `C` argument will lead to an "invalid command" response.
+
+### Unresolved edge case
+
+- When inputting commands which take more than one argument (e.g., `I M N`) extra spaces before, between and after the characters (e.g., <code>&nbsp;&nbsp;I&nbsp;&nbsp;&nbsp;M&nbsp;&nbsp;N&nbsp;&nbsp;</code>) do not invoke an "invalid command" response. I chose not to resolve this as it has no impact on the functionality of the program, only unnecessarily guarding against a mistakenly inputted empty space.
