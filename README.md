@@ -28,27 +28,55 @@ To use the program run `ruby bin/run.rb`.
 
 `H X1 X2 Y C` :- Colours a horizontal line of pixels in row Y between columns X1 and X2 inclusive, in colour C
 
+`F X Y C` :- Fills a region R with the colour C, where pixel (X,Y) is in R and any other pixel the same colour as (X,Y) and sharing a common side with any pixel in R also belongs to R.
+
+`W F` :- Scales the canvas by the given factor F in percentage.
+
 Example:
 
 ```
-> I 5 6
-> L 2 3 A
+> I 3 3
+> L 2 2 A
 > S
-OOOOO
-OOOOO
-OAOOO
-OOOOO
-OOOOO
-OOOOO
+OOO
+OAO
+OOO
 > C
 > S
-OOOOO
-OOOOO
-OOOOO
-OOOOO
-OOOOO
-OOOOO
+OOO
+OOO
+OOO
+> F 1 1 A
+> S
+AAA
+AAA
+AAA
+> W 200
+> S
+OOOAAA
+OOOAAA
+OOOAAA
+OOOOOO
+OOOOOO
+OOOOOO
+> H 1 6 3 Z
+> S
+OOOAAA
+OOOAAA
+ZZZZZZ
+OOOOOO
+OOOOOO
+OOOOOO
+> V 3 3 6 G
+> S
+OOOAAA
+OOOAAA
+ZZGZZZ
+OOGOOO
+OOGOOO
+OOGOOO
 ```
+`?` :- Shows in program help
 ### User stories
 
 - As a user I want to be able to quit the program
@@ -58,13 +86,16 @@ OOOOO
 - As a user, I want to be able to reset my canvas.
 - As a user, I want to be able to draw a vertical line in a column of my choice stretching between the rows I choose.
 - As a user, I want to be able to draw a horizontal line in a row of my choice stretching between the columns I choose.
+- As a user, I want to be able to fill regions of the same colour in other colours
+- As a user, I want to be able to scale my canvas up and down by factors written in percentages.
 - As a user, I want to be able to see in-program help.
 
 ### Code design
 
 - Initial confusion - the M x N matrix in the example in the brief is not written as per conventional matrix reference - M refers to columns and N to rows. `I 5 6` asks to create a canvas with 5 columns and 6 rows, NOT 5 rows and 6 columns.
-- I went with creating 2d arrays to represent the canvas as opposed to a matrix, as the latter are immutable in Ruby.
-- I push the values for M and N to an array called `canvas_size`. These values are used to limit the acceptable pixel choice when using the `L X Y C` command.
+- I went with creating 2d arrays to represent the canvas as opposed to a matrix, a string or a 1d array. I decided against matrices as they are immutable in Ruby, and I felt that 2d arrays are visually closer to the canvases being created by the user.
+- I push the values for M and N to an array called `canvas_dimensions`. These values are used to limit acceptable argument values for  many of the commands and are important for the scaling command.
+- I decided to use a single method, the `colour_pixel` method, to implement all other painting pixel methods - fill, draw vertical line and draw horizontal line.
 
 ### Edge cases
 
@@ -92,6 +123,16 @@ OOOOO
 - If no canvas has been created, an error message is displayed asking the user to create one first.
 - Although not ruled out by the `draw_horizontal_line` method, in practice it is not possible to draw a line outside of the boundary of the current canvas. This is due to the conditions set when inputting the `H` command and its arguments.
 - It is also not possible to input the columns such that the value of `X1` is higher than the value of `X2`, e.g., `H 4 2 2 Z`, again due to the conditions in the relevant `elsif` statement.
+
+`F X Y C` command
+- The program will enter into an infinite loop if pixel (X,Y) is the same colour as the one chosen in the C argument (where the original colour is equal to the new colour). I have therefore ruled this out.
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+- Although not ruled out by the `fill` method, in practice it is not possible to fill a region by choosing a pixel not inside the current canvas. This is due to the conditions when inputting the `F` command and its arguments.
+- Any extra arguments placed after the `C` argument will lead to an "invalid command" response.
+
+`W F` command
+- If no canvas has been created, an error message is displayed asking the user to create one first.
+
 
 ### Unresolved edge case
 

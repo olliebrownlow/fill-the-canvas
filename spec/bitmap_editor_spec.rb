@@ -125,9 +125,9 @@ describe Canvas do
       expect(canvas.fill(3, 3, "Z", "O")).to eq [["O", "O", "O", "O"], ["T", "T", "T", "T"], ["Z", "Z", "Z", "Z"], ["Z", "Z", "Z", "Z"]]
     end
 
-    it 'throws error if original colour is the same as new colour' do
+    it 'gives warning message if original colour is the same as new colour' do
       canvas.create_canvas(4, 4)
-      expect { canvas.fill(1, 1, "O", "O") }.to raise_error("Oops! Region already that colour: please choose a different fill colour")
+      expect { canvas.fill(1, 1, "O", "O") }.to output("Oops! Region already that colour: please choose a different one").to_stdout
     end
   end
 

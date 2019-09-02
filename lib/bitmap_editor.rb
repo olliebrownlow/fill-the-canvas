@@ -22,7 +22,7 @@ class Canvas
 
       case input.split(" ")[0]
       when "X"
-        break
+        exit
       when "?"
         help
       when "I"
@@ -102,22 +102,22 @@ class Canvas
   end
 
   def colour_pixel(column, row, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas[row - 1][column - 1] = colour
+    canvas[row - 1][column - 1] = colour
     canvas
   end
 
   def clear_canvas
-    canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.each { |row|
-                                        row.map! {
-                                          "O"
-                                        }
-                                      }
+    canvas.each { |row|
+      row.map! {
+        "O"
+      }
+    }
   end
 
   def draw_vertical_line(column, row1, row2, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : for i in (row1..row2)
-                                          colour_pixel(column, i, colour)
-                                        end
+    for i in (row1..row2)
+      colour_pixel(column, i, colour)
+    end
     canvas
   end
 
@@ -129,7 +129,10 @@ class Canvas
   end
 
   def fill(column, row, new_colour, original_colour)
-    raise "Oops! Region already that colour: please choose a different fill colour" if new_colour == original_colour
+    if new_colour == original_colour
+      puts "Oops! Region already that colour: please choose a different one"
+      run
+    end
     if canvas[row - 1][column - 1] == original_colour
       colour_pixel(column, row, new_colour)
       fill(column + 1, row, new_colour, original_colour) if !canvas[row - 1][column].nil?
@@ -192,6 +195,10 @@ class Canvas
   end
 
   def colour_pixel_and_fill_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
            ("A".."Z").include?(input.split(" ")[3]) &&
@@ -202,6 +209,10 @@ class Canvas
   end
 
   def vertical_line_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
            (input.split(" ")[2].to_i..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
@@ -213,6 +224,10 @@ class Canvas
   end
 
   def horizontal_line_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (input.split(" ")[1].to_i..canvas_dimensions[0]).include?(input.split(" ")[2].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
@@ -224,6 +239,10 @@ class Canvas
   end
 
   def fill_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
            ("A".."Z").include?(input.split(" ")[3]) &&
@@ -234,6 +253,10 @@ class Canvas
   end
 
   def scale_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
     unless input.split(" ")[1].to_i >= 1 &&
            input.split(" ")[2].nil?
       puts INVALID_COMMAND_MSG
