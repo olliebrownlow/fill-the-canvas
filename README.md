@@ -8,7 +8,7 @@
 
 ### Getting started
 
-Clone the repo, navigate to the root directory and run `bundle install` to get started.
+Clone the repo, navigate to the root directory and run `bundle install`.
 
 To use the program run `ruby bin/run.rb`.
 
@@ -92,10 +92,10 @@ OOGOOO
 
 ### Code design
 
-- Initial confusion - the M x N matrix in the example in the brief is not written as per conventional matrix reference - M refers to columns and N to rows. `I 5 6` asks to create a canvas with 5 columns and 6 rows, NOT 5 rows and 6 columns.
-- I went with creating 2d arrays to represent the canvas as opposed to a matrix, a string or a 1d array. I decided against matrices as they are immutable in Ruby, and I felt that 2d arrays are visually closer to the canvases being created by the user.
-- I push the values for M and N to an array called `canvas_dimensions`. These values are used to limit acceptable argument values for  many of the commands and are important for the scaling command.
+- I went with creating 2d arrays to represent the canvas as opposed to a matrix, a string or a simple list. I decided against matrices as they are immutable in Ruby, and I felt that 2d arrays are visually closer to the canvases being created by the user so preferred to work with them over the other two options.
+- I pushed the values for M and N to an array called `canvas_dimensions`. These values are used to limit acceptable argument values for many of the commands and are particularly important for the scaling command where they are also updated.
 - I decided to use a single method, the `colour_pixel` method, to implement all other painting pixel methods - fill, draw vertical line and draw horizontal line.
+- Scaling (`W` command) by greater than 100% means adding rows and columns while scaling below 100% means potentially deleting rows and columns. When scaling up, I decided to round up, where necessary, the number of rows and columns to add, but round down for deleting. The difference is only really noticeable for small canvases. For any canvas just one row or one column wide, rounding up when deleting could delete the entire canvas, which might be undesirable. Conversely, rounding down number of rows and columns to add when scaling up a small canvas may be undesirable too - after all, why would a user scale up in the first place if not for a bigger canvas?
 
 ### Edge cases
 
@@ -105,6 +105,7 @@ OOGOOO
 
 `S` command
 - If no canvas has been created, an error message is displayed asking the user to create one first.
+- Any extra arguments placed after the `S` argument will lead to an "invalid command" response.
 
 `L X Y C` command
 - If no canvas has been created, an error message is displayed asking the user to create one first.
@@ -113,6 +114,7 @@ OOGOOO
 
 `C` command
 - If no canvas has been created, an error message is displayed asking the user to create one first.
+- Any extra arguments placed after the `C` argument will lead to an "invalid command" response.
 
 `V X Y1 Y2 C` command
 - If no canvas has been created, an error message is displayed asking the user to create one first.
@@ -132,7 +134,8 @@ OOGOOO
 
 `W F` command
 - If no canvas has been created, an error message is displayed asking the user to create one first.
-
+- Only percentages over 1 can be entered.
+- Any extra arguments placed after the `F` argument will lead to an "invalid command" response.
 
 ### Unresolved edge case
 

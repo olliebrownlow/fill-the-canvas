@@ -22,8 +22,10 @@ class Canvas
 
       case input.split(" ")[0]
       when "X"
+        exit_and_help_guards(input)
         exit
       when "?"
+        exit_and_help_guards(input)
         help
       when "I"
         create_canvas_guards(input)
@@ -37,6 +39,7 @@ class Canvas
 
         create_canvas(columns, rows)
       when "S"
+        show_and_clear_guards(input)
         show_canvas
       when "L"
         colour_pixel_and_fill_guards(input)
@@ -47,6 +50,7 @@ class Canvas
 
         colour_pixel(x, y, colour)
       when "C"
+        show_and_clear_guards(input)
         clear_canvas
       when "V"
         vertical_line_guards(input)
@@ -98,7 +102,7 @@ class Canvas
   end
 
   def show_canvas
-    canvas.nil? ? puts(NO_CANVAS_MSG) : format_and_print_canvas(canvas)
+    format_and_print_canvas(canvas)
   end
 
   def colour_pixel(column, row, colour)
@@ -122,9 +126,9 @@ class Canvas
   end
 
   def draw_horizontal_line(column1, column2, row, colour)
-    canvas.nil? ? puts(NO_CANVAS_MSG) : for i in (column1..column2)
-                                          colour_pixel(i, row, colour)
-                                        end
+    for i in (column1..column2)
+      colour_pixel(i, row, colour)
+    end
     canvas
   end
 
@@ -184,6 +188,24 @@ class Canvas
   end
 
   private
+
+  def exit_and_help_guards(input)
+    unless input.split(" ")[1].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def show_and_clear_guards(input)
+    if canvas.nil?
+      puts(NO_CANVAS_MSG)
+      run
+    end
+    unless input.split(" ")[1].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
 
   def create_canvas_guards(input)
     unless (1..250).include?(input.split(" ")[1].to_i) &&
