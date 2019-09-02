@@ -95,7 +95,7 @@ describe Canvas do
       expect(canvas.fill(3, 3, "Z", "T")).to eq [["O", "O", "O"], ["O", "O", "O"], ["O", "O", "Z"]]
     end
 
-    it 'paints a region all of one colour with a new colour' do
+    it 'paints an enclosed region with a new colour' do
       canvas.create_canvas(4, 4)
       canvas.draw_horizontal_line(1, 4, 1, "T")
       canvas.draw_horizontal_line(1, 4, 4, "T")
@@ -104,13 +104,25 @@ describe Canvas do
       expect(canvas.fill(2, 2, "Z", "O")).to eq [["T", "T", "T", "T"], ["T", "Z", "Z", "T"], ["T", "Z", "Z", "T"], ["T", "T", "T", "T"]]
     end
 
-    it 'paints all neighbouring pixels of the same colour with a new colour' do
+    it 'paints all connecting pixels of the same colour with a new colour' do
       canvas.create_canvas(4, 4)
       canvas.draw_horizontal_line(1, 4, 1, "T")
       canvas.draw_horizontal_line(1, 4, 4, "T")
       canvas.draw_vertical_line(1, 1, 4, "T")
       canvas.draw_vertical_line(4, 1, 4, "T")
       expect(canvas.fill(1, 1, "Z", "T")).to eq [["Z", "Z", "Z", "Z"], ["Z", "O", "O", "Z"], ["Z", "O", "O", "Z"], ["Z", "Z", "Z", "Z"]]
+    end
+
+    it 'paints a region with a new colour without jumping a vertical line' do
+      canvas.create_canvas(4, 4)
+      canvas.draw_vertical_line(2, 1, 4, "T")
+      expect(canvas.fill(3, 3, "Z", "O")).to eq [["O", "T", "Z", "Z"], ["O", "T", "Z", "Z"], ["O", "T", "Z", "Z"], ["O", "T", "Z", "Z"]]
+    end
+
+    it 'paints a region with a new colour without jumping a horizontal line' do
+      canvas.create_canvas(4, 4)
+      canvas.draw_horizontal_line(1, 4, 2, "T")
+      expect(canvas.fill(3, 3, "Z", "O")).to eq [["O", "O", "O", "O"], ["T", "T", "T", "T"], ["Z", "Z", "Z", "Z"], ["Z", "Z", "Z", "Z"]]
     end
 
     it 'throws error if original colour is the same as new colour' do

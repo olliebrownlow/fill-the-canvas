@@ -2,78 +2,70 @@ class Canvas
   INVALID_COMMAND_MSG = "\nInvalid command, type 'help' to see a list of available commands."
   NO_CANVAS_MSG = "\nNo canvas created yet: please create one using the 'I M N' command."
 
-  attr_reader :canvas
+  attr_reader :canvas, :canvas_dimensions
 
   def initialize
     @canvas
-    @instructions = []
+    @canvas_dimensions = []
+  end
+
+  def greet
+    puts "\nWelcome to Canvas, your bitmap editor of choice."
+    run
   end
 
   def run
-    greet
-    canvas_dimensions = []
     while true
       puts "\nType '?' to see a list of available commands. Type 'X' to exit."
       print "Enter command: "
       input = gets.chomp
 
-      break if input == "X"
-
-      if input == "?"
+      case input.split(" ")[0]
+      when "X"
+        break
+      when "?"
         help
-      elsif input.split(" ")[0] == "I" &&
-            (1..250).include?(input.split(" ")[1].to_i) &&
-            (1..250).include?(input.split(" ")[2].to_i) &&
-            input.split(" ")[3].nil?
+      when "I"
+        create_canvas_guards(input)
+
+        columns = input.split(" ")[1].to_i
+        rows = input.split(" ")[2].to_i
 
         canvas_dimensions.clear
-        canvas_dimensions << input.split(" ")[1].to_i
-        canvas_dimensions << input.split(" ")[2].to_i
+        canvas_dimensions.push(columns)
+        canvas_dimensions.push(rows)
 
-        create_canvas(canvas_dimensions[0], canvas_dimensions[1])
-
-      elsif input == "S"
+        create_canvas(columns, rows)
+      when "S"
         show_canvas
-      elsif input.split(" ")[0] == "L" &&
-            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
-            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
-            ("A".."Z").include?(input.split(" ")[3]) &&
-            input.split(" ")[4].nil?
+      when "L"
+        colour_pixel_and_fill_guards(input, canvas_dimensions)
 
-        column = input.split(" ")[1].to_i
-        row = input.split(" ")[2].to_i
+        x = input.split(" ")[1].to_i
+        y = input.split(" ")[2].to_i
         colour = input.split(" ")[3]
 
-        colour_pixel(column, row, colour)
-      elsif input == "C"
+        colour_pixel(x, y, colour)
+      when "C"
         clear_canvas
-      elsif input.split(" ")[0] == "V" &&
-            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
-            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
-            (input.split(" ")[2].to_i..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
-            ("A".."Z").include?(input.split(" ")[4]) &&
-            input.split(" ")[5].nil?
+      when "V"
+        vertical_line_guards(input, canvas_dimensions)
 
         column = input.split(" ")[1].to_i
         row1 = input.split(" ")[2].to_i
         row2 = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
         draw_vertical_line(column, row1, row2, colour)
-
-      elsif input.split(" ")[0] == "H" &&
-            (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
-            (input.split(" ")[1].to_i..canvas_dimensions[0]).include?(input.split(" ")[2].to_i) &&
-            (1..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
-            ("A".."Z").include?(input.split(" ")[4]) &&
-            input.split(" ")[5].nil?
+      when "H"
+        horizontal_line_guards(input, canvas_dimensions)
 
         column1 = input.split(" ")[1].to_i
         column2 = input.split(" ")[2].to_i
         row = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
         draw_horizontal_line(column1, column2, row, colour)
-
-      elsif input.split(" ")[0] == "F"
+      when "F"
+        colour_pixel_and_fill_guards(input, canvas_dimensions)
 
         column = input.split(" ")[1].to_i
         row = input.split(" ")[2].to_i
@@ -87,9 +79,16 @@ class Canvas
     end
   end
 
-  def greet
-    puts "\nWelcome to Canvas, your bitmap editor of choice."
+  def fill_guards(input, canvas_dimensions)
+    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+           (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
+           ("A".."Z").include?(input.split(" ")[3]) &&
+           input.split(" ")[4].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
   end
+
 
   def help
     puts "\nHelp at hand"
@@ -112,10 +111,10 @@ class Canvas
 
   def clear_canvas
     canvas.nil? ? puts(NO_CANVAS_MSG) : canvas.each { |row|
-      row.map! {
-        "O"
-      }
-    }
+                                        row.map! {
+                                          "O"
+                                        }
+                                      }
   end
 
   def draw_vertical_line(column, row1, row2, colour)
@@ -136,15 +135,56 @@ class Canvas
     raise "Oops! Region already that colour: please choose a different fill colour" if new_colour == original_colour
     if canvas[row - 1][column - 1] == original_colour
       colour_pixel(column, row, new_colour)
-      fill(column - 1, row, new_colour, original_colour) if !canvas[column - 1].nil?
-      fill(column, row - 1, new_colour, original_colour) if !canvas[row - 1].nil?
-      fill(column + 1, row, new_colour, original_colour) if !canvas[column + 1].nil?
-      fill(column, row + 1, new_colour, original_colour) if !canvas[row + 1].nil?
+      fill(column + 1, row, new_colour, original_colour) if !canvas[row - 1][column].nil?
+      fill(column, row + 1, new_colour, original_colour) if !canvas[row].nil?
+      fill(column - 1, row, new_colour, original_colour) if !canvas[row - 1][column - 2].nil?
+      fill(column, row - 1, new_colour, original_colour) if !canvas[row - 2].nil?
     end
     canvas
   end
 
   private
+
+  def create_canvas_guards(input)
+    unless (1..250).include?(input.split(" ")[1].to_i) &&
+           rows = (1..250).include?(input.split(" ")[2].to_i) &&
+           input.split(" ")[3].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def colour_pixel_and_fill_guards(input, canvas_dimensions)
+    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+           (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
+           ("A".."Z").include?(input.split(" ")[3]) &&
+           input.split(" ")[4].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def vertical_line_guards(input, canvas_dimensions)
+    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+           (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
+           (input.split(" ")[2].to_i..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
+           ("A".."Z").include?(input.split(" ")[4]) &&
+           input.split(" ")[5].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def horizontal_line_guards(input, canvas_dimensions)
+    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+           (input.split(" ")[1].to_i..canvas_dimensions[0]).include?(input.split(" ")[2].to_i) &&
+           (1..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
+           ("A".."Z").include?(input.split(" ")[4]) &&
+           input.split(" ")[5].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
 
   def format_and_print_canvas(canvas)
     print "\n"
