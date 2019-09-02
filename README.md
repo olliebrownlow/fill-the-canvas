@@ -79,7 +79,7 @@ OOGOOO
 `?` :- Shows in program help
 ### User stories
 
-- As a user I want to be able to quit the program
+- As a user, I want to be able to quit the program
 - As a user, I want to be able to create a new canvas of any size I choose (up to 250 x 250).
 - As a user, I want to be able to see my canvas.
 - As a user, I want to be able to change the colour of individual pixels.
@@ -94,6 +94,7 @@ OOGOOO
 
 - I went with creating 2d arrays to represent the canvas as opposed to a matrix, a string or a simple list. I decided against matrices as they are immutable in Ruby, and I felt that 2d arrays are visually closer to the canvases being created by the user so preferred to work with them over the other two options.
 - I pushed the values for M and N to an array called `canvas_dimensions`. These values are used to limit acceptable argument values for many of the commands and are particularly important for the scaling command where they are also updated.
+- I separated the colour individual pixel method into another class as all other methods that change pixel colour do so using this method.
 - I decided to use a single method, the `colour_pixel` method, to implement all other painting pixel methods - fill, draw vertical line and draw horizontal line.
 - Scaling (`W` command) by greater than 100% means adding rows and columns while scaling below 100% means potentially deleting rows and columns. When scaling up, I decided to round up, where necessary, the number of rows and columns to add, but round down for deleting. The difference is only really noticeable for small canvases. For any canvas just one row or one column wide, rounding up when deleting could delete the entire canvas, which might be undesirable. Conversely, rounding down number of rows and columns to add when scaling up a small canvas may be undesirable too - after all, why would a user scale up in the first place if not for a bigger canvas?
 
@@ -140,3 +141,7 @@ OOGOOO
 ### Unresolved edge case
 
 - When inputting commands which take more than one argument (e.g., `I M N`) extra spaces before, between and after the characters (e.g., <code>&nbsp;&nbsp;I&nbsp;&nbsp;&nbsp;M&nbsp;&nbsp;N&nbsp;&nbsp;</code>) do not invoke an "invalid command" response. I chose not to resolve this as it has no impact on the functionality of the program, only unnecessarily guarding against a mistakenly inputted empty space.
+
+### If I started over..
+
+Towards the end of writing the code I thought of a different implementation in which, instead of holding a canvas in state, mutating it with each command, you could store each command that operates on the canvas in a list and execute them in order only after calling show (`S`). The clear command then becomes trivial - simply delete the list of instructions - and it would have the added bonus of being able to incorporate an undo function (delete the last instruction in the list).
