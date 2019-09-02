@@ -39,7 +39,7 @@ class Canvas
       when "S"
         show_canvas
       when "L"
-        colour_pixel_and_fill_guards(input, canvas_dimensions)
+        colour_pixel_and_fill_guards(input)
 
         x = input.split(" ")[1].to_i
         y = input.split(" ")[2].to_i
@@ -49,23 +49,25 @@ class Canvas
       when "C"
         clear_canvas
       when "V"
-        vertical_line_guards(input, canvas_dimensions)
+        vertical_line_guards(input)
 
         column = input.split(" ")[1].to_i
         row1 = input.split(" ")[2].to_i
         row2 = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
+
         draw_vertical_line(column, row1, row2, colour)
       when "H"
-        horizontal_line_guards(input, canvas_dimensions)
+        horizontal_line_guards(input)
 
         column1 = input.split(" ")[1].to_i
         column2 = input.split(" ")[2].to_i
         row = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
+
         draw_horizontal_line(column1, column2, row, colour)
       when "F"
-        colour_pixel_and_fill_guards(input, canvas_dimensions)
+        colour_pixel_and_fill_guards(input)
 
         column = input.split(" ")[1].to_i
         row = input.split(" ")[2].to_i
@@ -73,22 +75,17 @@ class Canvas
         original_colour = canvas[row - 1][column - 1]
 
         fill(column, row, new_colour, original_colour)
+      when "W"
+        scale_guards(input)
+
+        percent = input.split(" ")[1].to_i
+
+        scale(percent)
       else
         puts INVALID_COMMAND_MSG
       end
     end
   end
-
-  def fill_guards(input, canvas_dimensions)
-    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
-           (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
-           ("A".."Z").include?(input.split(" ")[3]) &&
-           input.split(" ")[4].nil?
-      puts INVALID_COMMAND_MSG
-      run
-    end
-  end
-
 
   def help
     puts "\nHelp at hand"
@@ -143,6 +140,46 @@ class Canvas
     canvas
   end
 
+  def scale(percent)
+    scale_factor = percent/100.0
+
+    if scale_factor >= 1
+      number_of_rows_to_add = (scale_factor * canvas_dimensions[1] - canvas_dimensions[1]).ceil
+      number_of_colums_to_add = (scale_factor * canvas_dimensions[0] - canvas_dimensions[0]).ceil
+
+      number_of_rows_to_add.times  {
+        canvas.push(Array.new(canvas_dimensions[0], "O"))
+      }
+      number_of_colums_to_add.times {
+        canvas.map { |row|
+        row.unshift("O")
+        }
+      }
+
+      canvas_dimensions.clear
+      canvas_dimensions.push(canvas[0].length)
+      canvas_dimensions.push(canvas.length)
+      canvas
+    else
+      number_of_rows_to_delete = ((1 - scale_factor) * canvas_dimensions[1]).floor
+      number_of_colums_to_delete = ((1 - scale_factor) * canvas_dimensions[0]).floor
+
+      number_of_rows_to_delete.times  {
+        canvas.pop
+      }
+      number_of_colums_to_delete.times {
+        canvas.map { |row|
+          row.shift
+        }
+      }
+
+      canvas_dimensions.clear
+      canvas_dimensions.push(canvas[0].length)
+      canvas_dimensions.push(canvas.length)
+      canvas
+    end
+  end
+
   private
 
   def create_canvas_guards(input)
@@ -154,7 +191,7 @@ class Canvas
     end
   end
 
-  def colour_pixel_and_fill_guards(input, canvas_dimensions)
+  def colour_pixel_and_fill_guards(input)
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
            ("A".."Z").include?(input.split(" ")[3]) &&
@@ -164,7 +201,7 @@ class Canvas
     end
   end
 
-  def vertical_line_guards(input, canvas_dimensions)
+  def vertical_line_guards(input)
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
            (input.split(" ")[2].to_i..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
@@ -175,12 +212,30 @@ class Canvas
     end
   end
 
-  def horizontal_line_guards(input, canvas_dimensions)
+  def horizontal_line_guards(input)
     unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
            (input.split(" ")[1].to_i..canvas_dimensions[0]).include?(input.split(" ")[2].to_i) &&
            (1..canvas_dimensions[1]).include?(input.split(" ")[3].to_i) &&
            ("A".."Z").include?(input.split(" ")[4]) &&
            input.split(" ")[5].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def fill_guards(input)
+    unless (1..canvas_dimensions[0]).include?(input.split(" ")[1].to_i) &&
+           (1..canvas_dimensions[1]).include?(input.split(" ")[2].to_i) &&
+           ("A".."Z").include?(input.split(" ")[3]) &&
+           input.split(" ")[4].nil?
+      puts INVALID_COMMAND_MSG
+      run
+    end
+  end
+
+  def scale_guards(input)
+    unless input.split(" ")[1].to_i >= 1 &&
+           input.split(" ")[2].nil?
       puts INVALID_COMMAND_MSG
       run
     end
@@ -192,5 +247,4 @@ class Canvas
       puts row.join("")
     }
   end
-
 end

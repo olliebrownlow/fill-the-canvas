@@ -130,4 +130,98 @@ describe Canvas do
       expect { canvas.fill(1, 1, "O", "O") }.to raise_error("Oops! Region already that colour: please choose a different fill colour")
     end
   end
+
+  describe '#scale' do
+    it 'can scale a 1 x 1 canvas by 200%' do
+      canvas.create_canvas(1, 1)
+      canvas.canvas_dimensions.push(1)
+      canvas.canvas_dimensions.push(1)
+      canvas.colour_pixel(1, 1, "A")
+      expect(canvas.scale(200)).to eq [["O", "A"], ["O", "O"]]
+    end
+
+    it 'can scale a 2 x 2 canvas by 200%' do
+      canvas.create_canvas(2, 2)
+      canvas.canvas_dimensions.push(2)
+      canvas.canvas_dimensions.push(2)
+      canvas.colour_pixel(1, 1, "A")
+      expect(canvas.scale(200)).to eq [["O", "O", "A", "O"], ["O", "O", "O", "O"], ["O", "O", "O", "O"], ["O", "O", "O", "O"]]
+    end
+
+    it 'can scale a 2 x 2 canvas by 200%' do
+      canvas.create_canvas(2, 2)
+      canvas.canvas_dimensions.push(2)
+      canvas.canvas_dimensions.push(2)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(200)).to eq [["O", "O", "A", "A"], ["O", "O", "A", "A"], ["O", "O", "O", "O"], ["O", "O", "O", "O"]]
+    end
+
+    it 'can scale a 1 x 1 canvas by 300%' do
+      canvas.create_canvas(1, 1)
+      canvas.canvas_dimensions.push(1)
+      canvas.canvas_dimensions.push(1)
+      canvas.colour_pixel(1, 1, "A")
+      expect(canvas.scale(300)).to eq [["O", "O", "A"], ["O", "O", "O"], ["O", "O", "O"]]
+    end
+
+    it 'can scale a 2 x 2 canvas by 150%' do
+      canvas.create_canvas(2, 2)
+      canvas.canvas_dimensions.push(2)
+      canvas.canvas_dimensions.push(2)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(150)).to eq [["O", "A", "A"], ["O", "A", "A"], ["O", "O", "O"]]
+    end
+
+    it 'can scale a 1 x 1 canvas by 150%' do
+      canvas.create_canvas(1, 1)
+      canvas.canvas_dimensions.push(1)
+      canvas.canvas_dimensions.push(1)
+      canvas.colour_pixel(1, 1, "A")
+      expect(canvas.scale(150)).to eq [["O", "A"], ["O", "O"]]
+    end
+
+    it 'can scale a 2 x 2 canvas by 50%' do
+      canvas.create_canvas(2, 2)
+      canvas.canvas_dimensions.push(2)
+      canvas.canvas_dimensions.push(2)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(50)).to eq [["A"]]
+    end
+
+    it 'can scale a 4 x 4 canvas by 50%' do
+      canvas.create_canvas(4, 4)
+      canvas.canvas_dimensions.push(4)
+      canvas.canvas_dimensions.push(4)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(50)).to eq [["A", "A"], ["A", "A"]]
+    end
+
+    it 'can scale a 4 x 4 canvas by 50%' do
+      canvas.create_canvas(4, 4)
+      canvas.canvas_dimensions.push(4)
+      canvas.canvas_dimensions.push(4)
+      canvas.colour_pixel(4, 1, "A")
+      canvas.colour_pixel(3, 1, "A")
+      canvas.colour_pixel(4, 2, "A")
+      canvas.colour_pixel(3, 2, "A")
+      expect(canvas.scale(50)).to eq [["A", "A"], ["A", "A"]]
+    end
+
+    it 'can scale a 4 x 4 canvas by 25%' do
+      canvas.create_canvas(4, 4)
+      canvas.canvas_dimensions.push(4)
+      canvas.canvas_dimensions.push(4)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(25)).to eq [["A"]]
+    end
+
+    it 'can scale a 2 x 2 canvas by 25%' do
+      canvas.create_canvas(2, 2)
+      canvas.canvas_dimensions.push(2)
+      canvas.canvas_dimensions.push(2)
+      canvas.fill(1, 1, "A", "O")
+      expect(canvas.scale(25)).to eq [["A"]]
+    end
+
+  end
 end
