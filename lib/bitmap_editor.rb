@@ -81,7 +81,23 @@ class Canvas
   end
 
   def help
-    puts "\nHelp at hand"
+    puts "\nQuit Program"
+    puts "  X\t\t\t:quits the application."
+    puts "Help"
+    puts "  ?\t\t\t:shows this help menu."
+    puts "New Canvas"
+    puts "  I M N\t\t\t:creates a new M by N canvas. All pixels start white, represented by 'O'."
+    puts "Colour In"
+    puts "  L X Y C\t\t:colours the pixel (X,Y) with colour C"
+    puts "  V X Y1 Y2 C\t\t:draws a vertical line with colour C in column X between rows Y1 and Y2 inclusive"
+    puts "  H X1 X2 Y C\t\t:draws a horizontal line with colour C in row Y between columns X1 and X2 inclusive"
+    puts "  F X Y C\t\t:Fills a region R with the colour C, where pixel (X,Y) is in R and any other\n\t\t\tpixel the same colour as (X,Y) and sharing a common side with any pixel in R also belongs to R."
+    puts "Scale"
+    puts "  W F\t\t\t:scales the canvas by the given factor F (in percentage)."
+    puts "Clear"
+    puts "  C\t\t\t:returns the canvas back to its original state."
+    puts "Show"
+    puts "  S\t\t\t:shows the canvas in its current state."
   end
 
   def create_canvas(columns, rows)
