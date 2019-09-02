@@ -1,3 +1,5 @@
+require_relative './paint.rb'
+
 class Canvas
   INVALID_COMMAND_MSG = "\nInvalid command, type 'help' to see a list of available commands."
   NO_CANVAS_MSG = "\nNo canvas created yet: please create one using the 'I M N' command."
@@ -27,63 +29,50 @@ class Canvas
       when "?"
         exit_and_help_guards(input)
         help
-      when "I"
-        create_canvas_guards(input)
-
-        columns = input.split(" ")[1].to_i
-        rows = input.split(" ")[2].to_i
-
-        canvas_dimensions.clear
-        canvas_dimensions.push(columns)
-        canvas_dimensions.push(rows)
-
-        create_canvas(columns, rows)
       when "S"
         show_and_clear_guards(input)
         show_canvas
-      when "L"
-        colour_pixel_and_fill_guards(input)
-
-        x = input.split(" ")[1].to_i
-        y = input.split(" ")[2].to_i
-        colour = input.split(" ")[3]
-
-        colour_pixel(x, y, colour)
       when "C"
         show_and_clear_guards(input)
         clear_canvas
+      when "I"
+        create_canvas_guards(input)
+        columns = input.split(" ")[1].to_i
+        rows = input.split(" ")[2].to_i
+        canvas_dimensions.clear
+        canvas_dimensions.push(columns)
+        canvas_dimensions.push(rows)
+        create_canvas(columns, rows)
+      when "L"
+        colour_pixel_and_fill_guards(input)
+        column = input.split(" ")[1].to_i
+        row = input.split(" ")[2].to_i
+        colour = input.split(" ")[3]
+        colour_pixel(column, row, colour)
       when "V"
         vertical_line_guards(input)
-
         column = input.split(" ")[1].to_i
         row1 = input.split(" ")[2].to_i
         row2 = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
-
         draw_vertical_line(column, row1, row2, colour)
       when "H"
         horizontal_line_guards(input)
-
         column1 = input.split(" ")[1].to_i
         column2 = input.split(" ")[2].to_i
         row = input.split(" ")[3].to_i
         colour = input.split(" ")[4]
-
         draw_horizontal_line(column1, column2, row, colour)
       when "F"
         colour_pixel_and_fill_guards(input)
-
         column = input.split(" ")[1].to_i
         row = input.split(" ")[2].to_i
         new_colour = input.split(" ")[3]
         original_colour = canvas[row - 1][column - 1]
-
         fill(column, row, new_colour, original_colour)
       when "W"
         scale_guards(input)
-
         percent = input.split(" ")[1].to_i
-
         scale(percent)
       else
         puts INVALID_COMMAND_MSG
@@ -105,9 +94,9 @@ class Canvas
     format_and_print_canvas(canvas)
   end
 
-  def colour_pixel(column, row, colour)
-    canvas[row - 1][column - 1] = colour
-    canvas
+  def colour_pixel(column, row, colour, paint = Paint)
+    paint = paint.new(column, row, colour, canvas = @canvas)
+    paint.colour_pixel
   end
 
   def clear_canvas

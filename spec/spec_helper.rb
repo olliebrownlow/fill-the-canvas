@@ -1,4 +1,5 @@
 require 'bitmap_editor'
+require './lib/paint.rb'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

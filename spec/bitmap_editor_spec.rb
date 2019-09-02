@@ -16,22 +16,6 @@ describe Canvas do
       canvas.create_canvas(2, 4)
       expect { canvas.show_canvas }.to output("\nOO\nOO\nOO\nOO\n").to_stdout
     end
-
-    it 'prints error message if no canvas has been created' do
-      expect { canvas.show_canvas }.to output("\nNo canvas created yet: please create one using the 'I M N' command.\n").to_stdout
-    end
-  end
-
-  describe '#colour_pixel' do
-    it 'changes the colour of an individual pixel' do
-      canvas.create_canvas(1, 1)
-      expect(canvas.colour_pixel(1, 1, "A")).to eq [["A"]]
-    end
-
-    it 'changes the colour of an individual pixel' do
-      canvas.create_canvas(2, 4)
-      expect(canvas.colour_pixel(2, 4, "A")).to eq [["O", "O"], ["O", "O"], ["O", "O"], ["O", "A"]]
-    end
   end
 
   describe '#clear_canvas' do
@@ -123,11 +107,6 @@ describe Canvas do
       canvas.create_canvas(4, 4)
       canvas.draw_horizontal_line(1, 4, 2, "T")
       expect(canvas.fill(3, 3, "Z", "O")).to eq [["O", "O", "O", "O"], ["T", "T", "T", "T"], ["Z", "Z", "Z", "Z"], ["Z", "Z", "Z", "Z"]]
-    end
-
-    it 'gives warning message if original colour is the same as new colour' do
-      canvas.create_canvas(4, 4)
-      expect { canvas.fill(1, 1, "O", "O") }.to output("Oops! Region already that colour: please choose a different one").to_stdout
     end
   end
 
