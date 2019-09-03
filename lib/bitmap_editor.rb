@@ -48,7 +48,8 @@ class Canvas
         column = input.split(" ")[1].to_i
         row = input.split(" ")[2].to_i
         colour = input.split(" ")[3]
-        colour_pixel(column, row, colour)
+        p = Paint.new(column, row, colour, canvas)
+        p.colour_pixel
       when "V"
         vertical_line_guards(input)
         column = input.split(" ")[1].to_i
@@ -115,11 +116,6 @@ class Canvas
     format_and_print_canvas(canvas)
   end
 
-  def colour_pixel(column, row, colour, paint = Paint)
-    paint = paint.new(column, row, colour, canvas)
-    paint.colour_pixel
-  end
-
   def clear_canvas
     canvas.each { |row|
       row.map! {
@@ -128,27 +124,30 @@ class Canvas
     }
   end
 
-  def draw_vertical_line(column, row1, row2, colour)
+  def draw_vertical_line(column, row1, row2, colour, paint = Paint)
     for i in (row1..row2)
-      colour_pixel(column, i, colour)
+      p = paint.new(column, i, colour, canvas)
+      p.colour_pixel
     end
     canvas
   end
 
-  def draw_horizontal_line(column1, column2, row, colour)
+  def draw_horizontal_line(column1, column2, row, colour, paint = Paint)
     for i in (column1..column2)
-      colour_pixel(i, row, colour)
+      p = paint.new(i, row, colour, canvas)
+      p.colour_pixel
     end
     canvas
   end
 
-  def fill(column, row, new_colour, original_colour)
+  def fill(column, row, new_colour, original_colour, paint = Paint)
     if new_colour == original_colour
       puts "Oops! Region already that colour: please choose a different one"
       run
     end
     if canvas[row - 1][column - 1] == original_colour
-      colour_pixel(column, row, new_colour)
+      p = paint.new(column, row, new_colour, canvas)
+      p.colour_pixel
       fill(column + 1, row, new_colour, original_colour) unless canvas[row - 1][column].nil?
       fill(column, row + 1, new_colour, original_colour) unless canvas[row].nil?
       fill(column - 1, row, new_colour, original_colour) unless canvas[row - 1][column - 2].nil?

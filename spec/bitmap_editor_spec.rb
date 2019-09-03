@@ -1,6 +1,13 @@
 describe Canvas do
   subject(:canvas) { described_class.new }
 
+  let(:paint) { double(:paint, column: column, row: row, colour: colour, canvas: canvas) }
+  let(:paint_class) { double(:paint_class, new: paint) }
+
+  let(:column)    { 1 }
+  let(:row)       { 1 }
+  let(:colour)    { "Z" }
+
   describe '#create_canvas' do
     it 'creates a 1 x 1 canvas' do
       expect(canvas.create_canvas(1, 1)).to eq [["O"]]
@@ -20,14 +27,17 @@ describe Canvas do
 
   describe '#clear_canvas' do
     it 'resets the canvas to white' do
+      allow(paint).to receive(:colour_pixel) { [["Z"]] }
       canvas.create_canvas(1, 1)
-      canvas.colour_pixel(1, 1, "Z")
+      paint = paint_class.new(1, 1, "Z", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.clear_canvas).to eq [["O"]]
     end
 
     it 'resets the canvas to white' do
       canvas.create_canvas(2, 4)
-      canvas.colour_pixel(2, 2, "Z")
+      paint = Paint.new(2, 2, "Z", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.clear_canvas).to eq [["O", "O"], ["O", "O"], ["O", "O"], ["O", "O"]]
     end
   end
@@ -69,13 +79,15 @@ describe Canvas do
 
     it 'paints all neighbouring pixels of the same colour with a new colour' do
       canvas.create_canvas(3, 3)
-      canvas.colour_pixel(3, 3, "T")
+      paint = Paint.new(3, 3, "T", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.fill(2, 2, "Z", "O")).to eq [["Z", "Z", "Z"], ["Z", "Z", "Z"], ["Z", "Z", "T"]]
     end
 
     it 'paints no neighbouring pixels if none of them are of the same colour' do
       canvas.create_canvas(3, 3)
-      canvas.colour_pixel(3, 3, "T")
+      paint = Paint.new(3, 3, "T", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.fill(3, 3, "Z", "T")).to eq [["O", "O", "O"], ["O", "O", "O"], ["O", "O", "Z"]]
     end
 
@@ -115,7 +127,8 @@ describe Canvas do
       canvas.create_canvas(1, 1)
       canvas.canvas_dimensions.push(1)
       canvas.canvas_dimensions.push(1)
-      canvas.colour_pixel(1, 1, "A")
+      paint = Paint.new(1, 1, "A", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.scale(200)).to eq [["O", "A"], ["O", "O"]]
     end
 
@@ -123,7 +136,8 @@ describe Canvas do
       canvas.create_canvas(2, 2)
       canvas.canvas_dimensions.push(2)
       canvas.canvas_dimensions.push(2)
-      canvas.colour_pixel(1, 1, "A")
+      paint = Paint.new(1, 1, "A", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.scale(200)).to eq [["O", "O", "A", "O"], ["O", "O", "O", "O"], ["O", "O", "O", "O"], ["O", "O", "O", "O"]]
     end
 
@@ -139,7 +153,8 @@ describe Canvas do
       canvas.create_canvas(1, 1)
       canvas.canvas_dimensions.push(1)
       canvas.canvas_dimensions.push(1)
-      canvas.colour_pixel(1, 1, "A")
+      paint = Paint.new(1, 1, "A", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.scale(300)).to eq [["O", "O", "A"], ["O", "O", "O"], ["O", "O", "O"]]
     end
 
@@ -155,7 +170,8 @@ describe Canvas do
       canvas.create_canvas(1, 1)
       canvas.canvas_dimensions.push(1)
       canvas.canvas_dimensions.push(1)
-      canvas.colour_pixel(1, 1, "A")
+      paint = Paint.new(1, 1, "A", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.scale(150)).to eq [["O", "A"], ["O", "O"]]
     end
 
@@ -179,10 +195,14 @@ describe Canvas do
       canvas.create_canvas(4, 4)
       canvas.canvas_dimensions.push(4)
       canvas.canvas_dimensions.push(4)
-      canvas.colour_pixel(4, 1, "A")
-      canvas.colour_pixel(3, 1, "A")
-      canvas.colour_pixel(4, 2, "A")
-      canvas.colour_pixel(3, 2, "A")
+      paint = Paint.new(4, 1, "A", canvas.canvas)
+      paint.colour_pixel
+      paint = Paint.new(3, 1, "A", canvas.canvas)
+      paint.colour_pixel
+      paint = Paint.new(4, 2, "A", canvas.canvas)
+      paint.colour_pixel
+      paint = Paint.new(3, 2, "A", canvas.canvas)
+      paint.colour_pixel
       expect(canvas.scale(50)).to eq [["A", "A"], ["A", "A"]]
     end
 
